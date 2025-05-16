@@ -1,0 +1,10 @@
+path: /content/drive/MyDrive/YoloV8/Acne_Detection/data/acne_dataset
+train: images/train  # Göreceli yol kullanıyoruz
+val: images/val
+test: images/test
+
+nc: 1
+names: ['acne']
+
+
+

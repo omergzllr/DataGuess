@@ -1,0 +1,10 @@
+path: /content/drive/MyDrive/YoloV8/Wrinkle_Detection/data/wrinkle_dataset
+train: images/train  # Göreceli yol kullanıyoruz
+val: images/val
+test: images/test
+
+nc: 9
+names: ['bunny_line', 'chin', 'crows_feet', 'forehead', 'frown_line', 'gummy_smile', 'masseter', 'sad_smile', 'smoker_lines']
+
+
+
