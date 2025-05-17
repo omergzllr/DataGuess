@@ -147,40 +147,49 @@ epochs=100	Uzun süreli eğitim, istikrarlı öğrenme sağlar.
 batch=16	Düşük batch size, RAM kullanımını azaltır.
 device='cpu'	Eğitim CPU’da yapılır; GPU varsa cuda olarak değiştirilebilir.
 optimizer='SGD'	Daha stabil, kontrollü öğrenme sağlar.
+# 🔧 Eğitim Ayarları
 
-🔧 Optimizasyon Ayarları:
-Parametre	Açıklama
-lr0=0.01	Başlangıç öğrenme oranı
-momentum=0.937	Öğrenme yönünü korumaya yardımcı olur.
-weight_decay=0.0005	Ağırlıkların aşırı büyümesini engeller.
+| Parametre        | Açıklama                                      |
+|------------------|-----------------------------------------------|
+| `epochs=100`       | Uzun süreli eğitim, istikrarlı öğrenme sağlar     |
+| `batch=16` | Düşük batch size, RAM kullanımını azaltır         |
+| `device=cpu` | Eğitim CPU’da yapılır; GPU varsa cuda olarak değiştirilebilir |
+| `optimizer='SGD'` | Daha stabil, kontrollü öğrenme sağlar |
 
-🌈 Görüntü Veri Artırma:
-Parametre	Açıklama
-fliplr=0.5	Yatay çevirme: yüz simetrisi için anlamlı
-scale=0.5	Farklı yüz boyutlarına karşı dayanıklılık sağlar
-mosaic=1.0	Mozaik birleştirme: veri çeşitliliği ve genelleme gücünü artırır
-mixup=0.0	Cilt verisi için uygun görülmemiştir
 
-🧬 Çoklu Model Eğitimi – train_all_models()
-Bu fonksiyon dört farklı cilt koşulu için ayrı ayrı model eğitir:
 
+# 🔧 Optimizasyon Ayarları
+
+| Parametre        | Açıklama                                      |
+|------------------|-----------------------------------------------|
+| `lr0=0.01`       | Başlangıç öğrenme oranı                       |
+| `momentum=0.937` | Öğrenme yönünü korumaya yardımcı olur         |
+| `weight_decay=0.0005` | Ağırlıkların aşırı büyümesini engeller |
+
+---
+
+# 🌈 Görüntü Veri Artırma
+
+| Parametre     | Açıklama                                                        |
+|---------------|-----------------------------------------------------------------|
+| `fliplr=0.5`  | Yatay çevirme: yüz simetrisi için anlamlı                      |
+| `scale=0.5`   | Farklı yüz boyutlarına karşı dayanıklılık sağlar               |
+| `mosaic=1.0`  | Mozaik birleştirme: veri çeşitliliği ve genelleme gücünü artırır |
+| `mixup=0.0`   | Cilt verisi için uygun görülmemiştir                           |
+
+---
+
+# 🧬 Çoklu Model Eğitimi – `train_all_models()`
+
+Bu fonksiyon, dört farklı cilt koşulu için ayrı ayrı model eğitir:
+
+```python
 data_paths = {
     'wrinkles': '.../wrinkles.yaml',
     'eyebags': '.../eyebags.yaml',
     'acne': '.../acne.yaml',
     'redness': '.../redness.yaml'
 }
-Her veri kümesi için:
 
-Model create_custom_model() ile oluşturulur ve eğitilir.
-
-Eğitilen model models/ dizinine .pt formatında kaydedilir.
-
-Eğitim süresi izlenir ve raporlanır.
-
-🛠️ Model Kaydetme
-Eğitim sonrası her model ayrı ayrı şu şekilde kaydedilir:
-
-models[condition].save(f'models/{condition}_model.pt')
 
 
