@@ -192,4 +192,23 @@ data_paths = {
 }
 
 
+🔁 Eğitim Süreci
+Her bir veri kümesi (wrinkles, eyebags, acne, redness) için:
+
+Model create_custom_model() fonksiyonu ile oluşturulur.
+
+Belirli data_path ile eğitilir.
+
+Eğitim süresi hesaplanarak raporlanır.
+
+Eğitilen model .pt formatında models/ klasörüne kaydedilir.
+
+🛠️ Model Kaydetme
+Eğitim tamamlandıktan sonra her model aşağıdaki gibi kaydedilir:
+
+python
+Copy
+Edit
+models[condition].save(f'models/{condition}_model.pt')
+Bu işlem, her bir cilt koşuluna özel modelin ayrı ayrı .pt dosyası olarak kayıt altına alınmasını sağlar.
 
