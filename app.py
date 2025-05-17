@@ -10,6 +10,7 @@ from PIL import Image
 import io
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
+import cv2
 
 app = Flask(__name__)
 
@@ -34,8 +35,9 @@ def process_single_model(model_name, image_path):
         results = models[model_name](image_path)
         result = results[0]
         
-        # Convert the result to PIL Image
+        # Convert the result to PIL Image (BGR to RGB)
         result_image = result.plot()
+        result_image = cv2.cvtColor(result_image, cv2.COLOR_BGR2RGB)  # Renk düzeltme
         result_image = Image.fromarray(result_image)
         
         # Convert to base64 for sending to frontend
