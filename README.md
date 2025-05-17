@@ -34,7 +34,7 @@ Bu proje, derin öğrenme ve bilgisayarla görme tekniklerini kullanarak insan y
 
 ## ⚙️ Kullanılan Teknolojiler
 
-- **YOLOv8n / YOLOv8n-seg** – Ultralytics tarafından sağlanan nesne tespit modeli.
+- **YOLOv8n** – Ultralytics tarafından sağlanan nesne tespit modeli.
 - **PyTorch** – Derin öğrenme için temel framework.
 - **Flask** – REST API ve web arayüzü için mikro framework.
 - **OpenCV & Pillow** – Görüntü işleme ve format dönüşümleri için.
@@ -68,8 +68,8 @@ Bu proje, derin öğrenme ve bilgisayarla görme tekniklerini kullanarak insan y
 
 | Parametre              | Değer              |
 |------------------------|--------------------|
-| Model                  | YOLOv8n / YOLOv8n-seg |
-| Epoch                  | 50                 |
+| Model                  | YOLOv8n            |
+| Epoch                  | 100                |
 | Batch Size             | 16                 |
 | Görüntü Boyutu         | 640x640            |
 | Optimizer              | SGD                |
@@ -164,9 +164,6 @@ mixup=0.0	Cilt verisi için uygun görülmemiştir
 🧬 Çoklu Model Eğitimi – train_all_models()
 Bu fonksiyon dört farklı cilt koşulu için ayrı ayrı model eğitir:
 
-python
-Copy
-Edit
 data_paths = {
     'wrinkles': '.../wrinkles.yaml',
     'eyebags': '.../eyebags.yaml',
