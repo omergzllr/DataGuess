@@ -77,3 +77,113 @@ Bu proje, derin öğrenme ve bilgisayarla görme tekniklerini kullanarak insan y
 | Eğitim/Doğrulama Oranı | %80 / %20          |
 
 
+# Eğitim Kodunun Açıklaması
+Kullanılan YOLOv8 Versiyonu: yolov8n
+
+yolov8n.pt, YOLOv8 ailesinin en hafif modelidir (nano versiyon).
+
+Düşük hesaplama gücü isteyen cihazlarda (ör. CPU) çalıştırmak için uygundur.
+
+Eğitim süresi daha kısadır.
+
+Küçük veri setleriyle hızlı prototipleme ve test için idealdir.
+
+Bu projede cilt verileri sınırlı olduğu için fazla parametreli modellere (s, m, l, x) gerek duyulmamıştır.
+
+🏗️ Model Özelleştirme – Katman Katman Açıklama
+CustomYOLOv8 Sınıfı
+YOLO sınıfı kalıtılarak özelleştirilmiş bir versiyon oluşturulmuştur. Bu sınıf aşağıdaki modifikasyonları yapar:
+
+🔧 Değiştirilen Ana Katmanlar:
+🔁 C2f Katmanları (Derinlik Artırımı):
+self.model.model[4] ve self.model.model[6]:
+
+C2f bloklarının tekrar sayısı (n=2) artırılarak daha derin özellik öğrenimi sağlanır.
+
+Kanal sayısı da 256 ve 512 gibi daha geniş tutulmuştur.
+
+Daha karmaşık örüntüler (ör. kırışıklık, akne şekilleri) bu sayede daha iyi temsil edilir.
+
+🧠 AttentionModule (Uzamsal ve Kanal Dikkat Mekanizması):
+self.model.model.insert(8, AttentionModule(512))
+
+Spatial (uzamsal) ve Channel (kanal) attention birlikte uygulanır.
+
+Önemli bölgeler (ör. kırışıklık yoğunluğu olan alanlar) vurgulanarak modelin odaklanması sağlanır.
+
+Sigmoid aktivasyon ile dikkat maskeleri oluşturulur.
+
+🌀 SPPF (Spatial Pyramid Pooling Fast):
+self.model.model[9]:
+
+k=5 kullanılarak daha geniş alanlardan bilgi toplanır.
+
+Farklı ölçekte bağlam (context) bilgisi öğrenilir.
+
+🧩 Başlık (Head) Katmanı:
+self.model.model[15]:
+
+Tahmin öncesi bir C2f bloğu ile son özelliklerin işlenme kapasitesi artırılır.
+
+Daha hassas kutu/sınıf tahminleri yapılır.
+Dikkat Katmanı (AttentionModule)
+
+class AttentionModule(nn.Module):
+
+İki parçalı bir dikkat mekanizması içerir;
+
+Spatial Attention: Görsel alanın hangi bölgelerinin daha önemli olduğunu öğrenir.
+
+Channel Attention: Hangi filtrelerin (feature maps) daha anlamlı olduğunu öğrenir.
+
+Her ikisinin çıktısı giriş ile çarpılarak "önemli alanlar" güçlendirilmiş olur.
+
+🧪 Eğitim Fonksiyonu – train()
+Model eğitimi için çeşitli hiperparametreler özelleştirilmiştir:
+
+📌 Eğitim Ayarları:
+Parametre	Açıklama
+epochs=100	Uzun süreli eğitim, istikrarlı öğrenme sağlar.
+batch=16	Düşük batch size, RAM kullanımını azaltır.
+device='cpu'	Eğitim CPU’da yapılır; GPU varsa cuda olarak değiştirilebilir.
+optimizer='SGD'	Daha stabil, kontrollü öğrenme sağlar.
+
+🔧 Optimizasyon Ayarları:
+Parametre	Açıklama
+lr0=0.01	Başlangıç öğrenme oranı
+momentum=0.937	Öğrenme yönünü korumaya yardımcı olur.
+weight_decay=0.0005	Ağırlıkların aşırı büyümesini engeller.
+
+🌈 Görüntü Veri Artırma:
+Parametre	Açıklama
+fliplr=0.5	Yatay çevirme: yüz simetrisi için anlamlı
+scale=0.5	Farklı yüz boyutlarına karşı dayanıklılık sağlar
+mosaic=1.0	Mozaik birleştirme: veri çeşitliliği ve genelleme gücünü artırır
+mixup=0.0	Cilt verisi için uygun görülmemiştir
+
+🧬 Çoklu Model Eğitimi – train_all_models()
+Bu fonksiyon dört farklı cilt koşulu için ayrı ayrı model eğitir:
+
+python
+Copy
+Edit
+data_paths = {
+    'wrinkles': '.../wrinkles.yaml',
+    'eyebags': '.../eyebags.yaml',
+    'acne': '.../acne.yaml',
+    'redness': '.../redness.yaml'
+}
+Her veri kümesi için:
+
+Model create_custom_model() ile oluşturulur ve eğitilir.
+
+Eğitilen model models/ dizinine .pt formatında kaydedilir.
+
+Eğitim süresi izlenir ve raporlanır.
+
+🛠️ Model Kaydetme
+Eğitim sonrası her model ayrı ayrı şu şekilde kaydedilir:
+
+models[condition].save(f'models/{condition}_model.pt')
+
+
