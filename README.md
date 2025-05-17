@@ -183,7 +183,7 @@ optimizer='SGD'	Daha stabil, kontrollü öğrenme sağlar.
 
 Bu fonksiyon, dört farklı cilt koşulu için ayrı ayrı model eğitir:
 
-```python
+
 data_paths = {
     'wrinkles': '.../wrinkles.yaml',
     'eyebags': '.../eyebags.yaml',
@@ -206,9 +206,6 @@ Eğitilen model .pt formatında models/ klasörüne kaydedilir.
 🛠️ Model Kaydetme
 Eğitim tamamlandıktan sonra her model aşağıdaki gibi kaydedilir:
 
-python
-Copy
-Edit
 models[condition].save(f'models/{condition}_model.pt')
 Bu işlem, her bir cilt koşuluna özel modelin ayrı ayrı .pt dosyası olarak kayıt altına alınmasını sağlar.
 
